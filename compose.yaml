@@ -1,0 +1,56 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 9000:80
+
+# The commented out section below is an example of how to define a PostgreSQL
+# database that your application can use. `depends_on` tells Docker Compose to
+# start the database before your application. The `db-data` volume persists the
+# database data between container restarts. The `db-password` secret is used
+# to set the database password. You must create `db/password.txt` and add
+# a password of your choosing to it before running `docker-compose up`.
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./php/www:/var/www/html  # Monte ton projet dans le conteneur
+    networks:
+      - app-network  # Service PHP sur le réseau interne 'app-network'
+  db:
+    image: mysql:8.4  
+    container_name: mysql-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root  # Définir un mot de passe pour l'utilisateur root
+      - MYSQL_DATABASE=gestion_produits  # Nom de la base de données à créer
+    ports:
+      - "3306:3306"  # Mappe le port 3306 de l'hôte au port 3306 du conteneur
+    volumes:
+      - db-data:/var/lib/mysql  # Volume persistant pour la base de données
+      - ./database:/docker-entrypoint-initdb.d  # Monte ton répertoire avec le fichier .sql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+volumes:
+  db-data:
+
+# Définir le réseau pour les services
+networks:
+  app-network:
+    driver: bridge
+
