@@ -45,7 +45,8 @@ FROM php:8.3.13-apache
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Installer les extensions nécessaires
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Changer le port d'écoute d'Apache de 80 → 8080
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf && \
