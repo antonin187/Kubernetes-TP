@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deployment
+spec:
+  replicas: 2  # Deux réplicas pour une haute disponibilité
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+        - name: php
+          image: epsiregistry.azurecr.io/gestion-produits-server:latest  # Ton image Docker personnalisée
+          env:
+            - name: MYSQL_HOST
+              value: "mysql-service"  # Le nom du service MySQL dans Kubernetes
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: database
+          ports:
+            - containerPort: 8080  # Port exposé par le conteneur PHP

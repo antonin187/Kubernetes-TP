@@ -1,0 +1,2 @@
+Je travaille avec Docker desktop sur mon mac, donc il ne m'est pas possible de faire un claim de volume. En contrepartie, j'ai décidé de créer un dossier sur ma machine qui va stocker mes datas.
+Ce volume va donc rester persistant

@@ -47,6 +47,9 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Installer les extensions nécessaires
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+# Changer le port d'écoute d'Apache de 80 → 8080
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf && \
+    sed -i 's/:80>/:8080>/' /etc/apache2/sites-available/000-default.conf
 
 # Copy app files from the app directory.
 COPY ./php/www /var/www/html
@@ -54,6 +57,9 @@ COPY ./php/www /var/www/html
 # Donner les bonnes permissions aux fichiers et répertoires
 RUN chmod -R 777 /var/www/html
 RUN chmod -R 777 /var/www/html/uploads
+
+# Ne pas oublier d’exposer le bon port (8080)
+EXPOSE 8080
 
 # Switch to a non-privileged user (defined in the base image) that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
