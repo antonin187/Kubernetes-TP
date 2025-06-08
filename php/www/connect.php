@@ -1,10 +1,10 @@
 <?php
 
     // MySQL connection parameters
-    $host = getenv('MYSQL_HOST') ?: 'mysql-service';
-    $username = getenv('MYSQL_USER') ?: 'root';
-    $password = getenv('MYSQL_PASSWORD') ?: 'root';
-    $db = getenv('MYSQL_DATABASE') ?: 'gestion_produits';
+    $host = getenv('MYSQL_HOST');
+    $username = getenv('MYSQL_USER');
+    $password = getenv('MYSQL_PASSWORD');
+    $db = getenv('MYSQL_DATABASE');
 
     // Connexion avec pdo mysql
     $db = new PDO("pgsql:host=$host;dbname=$db", $username, $password);

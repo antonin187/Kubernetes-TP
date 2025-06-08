@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: php
-          image: epsiregistry.azurecr.io/gestion-produits-server:latest  # Ton image Docker personnalisée
+          image: epsiregistry.azurecr.io/gestion-produits-server:latest # Image personnalisée sur mon registre Azure
           env:
             - name: MYSQL_HOST
-              value: "mysql-service"  # Le nom du service MySQL dans Kubernetes
+              value: "mysql-service"
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
@@ -34,4 +34,4 @@ spec:
                   name: mysql-secret
                   key: database
           ports:
-            - containerPort: 8080  # Port exposé par le conteneur PHP
+            - containerPort: 8080
