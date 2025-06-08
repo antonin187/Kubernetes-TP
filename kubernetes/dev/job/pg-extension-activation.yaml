@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: enable-pgcrypto
+  namespace: dev
+spec:
+  template:
+    spec:
+      containers:
+      - name: psql
+        image: postgres:16
+        command: ["psql"]
+        args: [
+          "-U", "postgres",
+          "-d", "gestion_produits",
+          "-h", "pg-service",
+          "-c", "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+        ]
+        env:
+        - name: PGPASSWORD
+          value: "root"
+      restartPolicy: Never

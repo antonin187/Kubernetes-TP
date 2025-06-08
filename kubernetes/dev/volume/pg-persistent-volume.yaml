@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: pg-pv
+  namespace: dev
 spec:
   capacity:
     storage: 5Gi
@@ -9,8 +10,8 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   azureDisk:
-    diskName: mysql-aksdisk
-    diskURI: /subscriptions/c3a93105-712e-4de0-b82d-5433d504d44f/resourceGroups/EPSI/providers/Microsoft.Compute/disks/mysql-aksdisk
+    diskName: pg-aksdisk
+    diskURI: /subscriptions/c3a93105-712e-4de0-b82d-5433d504d44f/resourceGroups/EPSI/providers/Microsoft.Compute/disks/pg-aksdisk
     cachingMode: ReadWrite
     fsType: ext4
     kind: Managed

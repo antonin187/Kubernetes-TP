@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg
+  template:
+    metadata:
+      labels:
+        app: pg
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16
+          env:
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/db"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: database
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-storage
+            - mountPath: /docker-entrypoint-initdb.d/init.sql
+              name: pg-init-script
+              subPath: init.sql
+      volumes:
+        - name: pg-storage
+          persistentVolumeClaim:
+            claimName: pg-pvc
+        - name: pg-init-script
+          configMap:
+            name: pg-init-script

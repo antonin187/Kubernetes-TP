@@ -1,11 +1,11 @@
 <?php
 
-    // Postgres connexion
-    $host = 'localhost';
-    $port = '5432';
-    $username = 'postgres';
-    $password = 'postgres';
-    $db = 'gestion_produits';
+    $host = getenv('PG_HOST');
+    $port = getenv('PG_PORT');
+    $username = getenv('PG_USER');
+    $password = getenv('PG_PASSWORD');
+    $db = getenv('PG_DATABASE');
+
 
     $db = new PDO("pgsql:host=$host;port=$port;dbname=$db", $username, $password);
 
